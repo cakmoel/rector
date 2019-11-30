@@ -50,6 +50,7 @@ final class CompileCommand extends Command
 
         // this breaks phpstan dependency, as whole /conf is removed
 //		$this->processFactory->create(['composer', 'require', '--no-update', 'dg/composer-cleaner:^2.0'], $this->buildDir);
+        // exclude this with "clearn ignore: https://github.com/dg/composer-cleaner#configuration + uncomment and try again :)
 
 		$this->fixComposerJson($this->buildDir);
 		$this->processFactory->create(['composer', 'update', '--no-dev', '--classmap-authoritative'], $this->buildDir);
