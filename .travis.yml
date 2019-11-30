@@ -26,120 +26,120 @@ jobs:
                 - cd compiler
                 - bin/compile
 
-        # Stage 1
-        -
-            stage: test
-            php: 7.2
-            name: Lowest dependencies
-            install:
-                # install lowest dependencies
-                - composer update --prefer-lowest --no-progress
+#        # Stage 1
+#        -
+#            stage: test
+#            php: 7.2
+#            name: Lowest dependencies
+#            install:
+#                # install lowest dependencies
+#                - composer update --prefer-lowest --no-progress
+#
+#        -
+#            name: PHPStan
+#            php: 7.2
+#            script:
+#                - composer phpstan
+#
+#        -
+#            php: 7.2
+#            name: ECS
+#            script:
+#                - composer check-cs
+#
+#        -
+#            name: 'Unit tests'
+#            script:
+#                - vendor/bin/phpunit --testsuite main
+#
+#        -
+#            php: 7.3
+#            name: Rector
+#            script:
+#                - composer rector
+#
+#        -
+#            name: Documentation
+#            php: 7.2
+#            script:
+#                - composer check-docs
+#
+#        -
+#            name: Simple checks
+#            php: 7.2
+#            script:
+#                - php ci/check_services_in_yaml_configs.php
+#                - php ci/run_all_sets.php
 
-        -
-            name: PHPStan
-            php: 7.2
-            script:
-                - composer phpstan
-
-        -
-            php: 7.2
-            name: ECS
-            script:
-                - composer check-cs
-
-        -
-            name: 'Unit tests'
-            script:
-                - vendor/bin/phpunit --testsuite main
-
-        -
-            php: 7.3
-            name: Rector
-            script:
-                - composer rector
-
-        -
-            name: Documentation
-            php: 7.2
-            script:
-                - composer check-docs
-
-        -
-            name: Simple checks
-            php: 7.2
-            script:
-                - php ci/check_services_in_yaml_configs.php
-                - php ci/run_all_sets.php
-
-        # Stage 2
-        -
-            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
-            stage: standalone
-            php: 7.3
-            name: Standalone Run
-            script:
-                # 1. install locally
-                - mkdir test-paths
-                - cd test-paths
-
-                - mkdir rector-dir
-                - composer require rector/rector -d rector-dir
-
-                - mkdir symfony-demo-dir
-                - composer create-project symfony/symfony-demo symfony-demo-dir --dev
-                # missing for some reason
-                - composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir
-                - composer dump-autoload --no-dev -d symfony-demo-dir
-
-                # 2. run an another project
-                - rector-dir/vendor/bin/rector
-
-                - cd symfony-demo-dir
-                - ../rector-dir/vendor/bin/rector
-
-                # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
-                - ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
-
-        # Stage 3
-        -
-            stage: coverage
-            php: 7.3
-            name: Test Coverage
-            if: branch = master AND type = push
-            before_install:
-                - echo "keep xdebug"
-            script:
-                - vendor/bin/phpunit --coverage-clover coverage.xml
-                - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
-                - php php-coveralls.phar --verbose
-
-        # Windows
-        - &STANDARD_WINDOWS_JOB
-            stage: test
-            name: Windows PHP 7.2
-            os: windows
-            dist: '1803-containers'
-            language: sh # No PHP currently
-            env: PHP_VERSION=7.2.23
-            install:
-                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
-                - choco install composer --ia "/DEV=C:\tools\php"
-                - echo 'memory_limit=1G' >> 'C:\tools\php\php.ini'
-                - echo 'date.timezone="UTC"' >> 'C:\tools\php\php.ini'
-                - echo 'extension_dir=ext' >> 'C:\tools\php\php.ini'
-                - echo 'extension=php_mbstring.dll' >> 'C:\tools\php\php.ini'
-                - echo 'extension=php_openssl.dll' >> 'C:\tools\php\php.ini'
-                - echo 'extension=php_mysqli.dll' >> 'C:\tools\php\php.ini'
-                - echo 'extension=php_intl.dll' >> 'C:\tools\php\php.ini'
-                - export PATH=/c/tools/php:$PATH
-            script:
-                # @todo this is probably broken, needs fixing
-                - php vendor/phpunit/phpunit/phpunit
-
-        -
-            <<: *STANDARD_WINDOWS_JOB
-            name: Windows PHP 7.3
-            env: PHP_VERSION=7.3.10
+#        # Stage 2
+#        -
+#            # Run standalone install in non-root package, ref https://github.com/rectorphp/rector/issues/732
+#            stage: standalone
+#            php: 7.3
+#            name: Standalone Run
+#            script:
+#                # 1. install locally
+#                - mkdir test-paths
+#                - cd test-paths
+#
+#                - mkdir rector-dir
+#                - composer require rector/rector -d rector-dir
+#
+#                - mkdir symfony-demo-dir
+#                - composer create-project symfony/symfony-demo symfony-demo-dir --dev
+#                # missing for some reason
+#                - composer require doctrine/doctrine-fixtures-bundle -d symfony-demo-dir
+#                - composer dump-autoload --no-dev -d symfony-demo-dir
+#
+#                # 2. run an another project
+#                - rector-dir/vendor/bin/rector
+#
+#                - cd symfony-demo-dir
+#                - ../rector-dir/vendor/bin/rector
+#
+#                # --hide-autoload-errors due to skipped dev deps and mixes tests in /src
+#                - ../rector-dir/vendor/bin/rector process src --set code-quality --hide-autoload-errors --dry-run
+#
+#        # Stage 3
+#        -
+#            stage: coverage
+#            php: 7.3
+#            name: Test Coverage
+#            if: branch = master AND type = push
+#            before_install:
+#                - echo "keep xdebug"
+#            script:
+#                - vendor/bin/phpunit --coverage-clover coverage.xml
+#                - wget https://github.com/php-coveralls/php-coveralls/releases/download/v2.1.0/php-coveralls.phar
+#                - php php-coveralls.phar --verbose
+#
+#        # Windows
+#        - &STANDARD_WINDOWS_JOB
+#            stage: test
+#            name: Windows PHP 7.2
+#            os: windows
+#            dist: '1803-containers'
+#            language: sh # No PHP currently
+#            env: PHP_VERSION=7.2.23
+#            install:
+#                - choco install php --version=${PHP_VERSION} --package-parameters="/InstallDir:c:\tools\php"
+#                - choco install composer --ia "/DEV=C:\tools\php"
+#                - echo 'memory_limit=1G' >> 'C:\tools\php\php.ini'
+#                - echo 'date.timezone="UTC"' >> 'C:\tools\php\php.ini'
+#                - echo 'extension_dir=ext' >> 'C:\tools\php\php.ini'
+#                - echo 'extension=php_mbstring.dll' >> 'C:\tools\php\php.ini'
+#                - echo 'extension=php_openssl.dll' >> 'C:\tools\php\php.ini'
+#                - echo 'extension=php_mysqli.dll' >> 'C:\tools\php\php.ini'
+#                - echo 'extension=php_intl.dll' >> 'C:\tools\php\php.ini'
+#                - export PATH=/c/tools/php:$PATH
+#            script:
+#                # @todo this is probably broken, needs fixing
+#                - php vendor/phpunit/phpunit/phpunit
+#
+#        -
+#            <<: *STANDARD_WINDOWS_JOB
+#            name: Windows PHP 7.3
+#            env: PHP_VERSION=7.3.10
 
     allow_failures:
         - name: ECS
