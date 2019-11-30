@@ -66,10 +66,11 @@ final class CompileCommand extends Command
 		unset($json['require-dev'], $json['autoload-dev']);
 
 		unset($json['replace']);
+
 		$json['name'] = 'rector/rector';
 
 		// simplify autoload (remove not packed build directory]
-		$json['autoload']['psr-4']['Rector\\'] = 'src/';
+		$json['autoload']['psr-4']['Rector\\'] = 'src';
 
 		$encodedJson =  Json::encode($json, Json::PRETTY);
 
