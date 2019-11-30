@@ -5,11 +5,12 @@ use Rector\Compiler\Console\CompileCommand;
 use Rector\Compiler\Filesystem\SymfonyFilesystem;
 use Rector\Compiler\Process\DefaultProcessFactory;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Filesystem\Filesystem;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $compileCommand = new CompileCommand(
-	new SymfonyFilesystem(new \Symfony\Component\Filesystem\Filesystem()),
+	new SymfonyFilesystem(new Filesystem()),
 	new DefaultProcessFactory(),
 	__DIR__ . '/../build',
 	__DIR__ . '/../..'
