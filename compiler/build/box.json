@@ -7,6 +7,7 @@
         "KevinGH\\Box\\Compactor\\PhpScoper"
     ],
     "directories": [
+        "config",
         "src",
         "packages",
         "stubs",
