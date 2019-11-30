@@ -1,1 +1,0 @@
-building PHAR for symfony console app?
