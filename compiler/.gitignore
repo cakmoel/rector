@@ -1,0 +1,9 @@
+/temp
+!/temp/.gitkeep
+/example
+/vendor
+/build
+composer.lock
+.idea/
+
+.phpunit.result.cache

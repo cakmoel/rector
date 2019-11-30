@@ -1,0 +1,25 @@
+{
+    "name": "rector/rector-compiler",
+    "description": "PHAR Compiler for Rector",
+    "license": "MIT",
+    "require": {
+        "php": "^7.2",
+        "symfony/console": "^4.4",
+        "symfony/process": "^4.4",
+        "symfony/filesystem": "^4.4",
+        "nette/utils": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rector\\Compiler\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rector\\Compiler\\": "tests"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4"
+    }
+}

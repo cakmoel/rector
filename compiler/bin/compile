@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php declare(strict_types = 1);
+
+use Rector\Compiler\Console\CompileCommand;
+use Rector\Compiler\Filesystem\SymfonyFilesystem;
+use Rector\Compiler\Process\DefaultProcessFactory;
+use Symfony\Component\Console\Application;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$compileCommand = new CompileCommand(
+	new SymfonyFilesystem(new \Symfony\Component\Filesystem\Filesystem()),
+	new DefaultProcessFactory(),
+	__DIR__ . '/../build',
+	__DIR__ . '/../..'
+);
+
+/** @var Application $application */
+$application = new Application();
+$application->add($compileCommand);
+$application->setDefaultCommand($compileCommand->getName(), true);
+$application->run();
