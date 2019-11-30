@@ -13,7 +13,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\NetteToSymfony\Event\EventInfo;
+use Rector\NetteToSymfony\ValueObject\EventInfo;
 use Rector\NetteToSymfony\Event\EventInfosFactory;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
