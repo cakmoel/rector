@@ -18,6 +18,14 @@ script:
 
 jobs:
     include:
+        -
+            stage: compile
+            php: 7.2
+            name: "Compile Rector to prefixed PHAR"
+            script:
+                - cd compiler
+                - bin/compile
+
         # Stage 1
         -
             stage: test
