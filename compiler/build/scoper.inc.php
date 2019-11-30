@@ -76,6 +76,7 @@ return [
     ],
     'whitelist' => [
         'Rector\*',
+        'PHPStan\*',
         'PhpParser\*',
     ],
 ];
