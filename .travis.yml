@@ -22,6 +22,8 @@ jobs:
             stage: compile
             php: 7.2
             name: "Compile Rector to prefixed PHAR"
+            install:
+                - composer install -d compiler
             script:
                 - cd compiler
                 - bin/compile
