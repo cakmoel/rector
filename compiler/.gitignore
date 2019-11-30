@@ -2,7 +2,6 @@
 !/temp/.gitkeep
 /example
 /vendor
-/build
 composer.lock
 .idea/
 
