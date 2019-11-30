@@ -22,9 +22,7 @@
         }
     ],
     "bin": [
-        "bin/rector",
-        "bin/bootstrap.php",
-        "bin/container.php"
+        "bin/rector"
     ],
     "require": {
         "php": "^7.2",
