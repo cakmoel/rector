@@ -28,6 +28,7 @@ jobs:
             script:
                 - cd compiler
                 - bin/compile
+                - php ../tmp/rector.phar
 
 #        # Stage 1
 #        -
