@@ -34,7 +34,7 @@ try {
 
     /** @var Configuration $configuration */
     $configuration = $container->get(Configuration::class);
-    $configuration->setFirstResolverConfig($configResolver->getFirstResolvedConfig());
+    $configuration->setFirstResolverConfig($rectorConfigsResolver->getFirstResolvedConfig());
 } catch (Throwable $throwable) {
     $symfonyStyle = (new SymfonyStyleFactory(new PrivatesCaller()))->create();
     $symfonyStyle->error($throwable->getMessage());
@@ -128,33 +128,47 @@ final class AutoloadIncluder
 final class RectorConfigsResolver
 {
     /**
+     * @var ConfigResolver
+     */
+    private $configResolver;
+
+    public function __construct()
+    {
+        $this->configResolver = new ConfigResolver();
+    }
+
+    /**
      * @return string[]
      */
     public function provide(): array
     {
         $configs = [];
-        $configResolver = new ConfigResolver();
 
         // Detect configuration from --set
         $input = new ArgvInput();
 
-        $setConfig = $configResolver->resolveSetFromInputAndDirectory($input, Set::SET_DIRECTORY);
+        $setConfig = $this->configResolver->resolveSetFromInputAndDirectory($input, Set::SET_DIRECTORY);
         if ($setConfig !== null) {
             $configs[] = $setConfig;
         }
 
         // And from --config or default one
-        $inputOrFallbackConfig = $configResolver->resolveFromInputWithFallback($input, ['rector.yml', 'rector.yaml']);
+        $inputOrFallbackConfig = $this->configResolver->resolveFromInputWithFallback($input, ['rector.yml', 'rector.yaml']);
         if ($inputOrFallbackConfig !== null) {
             $configs[] = $inputOrFallbackConfig;
         }
 
         // resolve: parameters > sets
-        $parameterSetsConfigs = $configResolver->resolveFromParameterSetsFromConfigFiles($configs, Set::SET_DIRECTORY);
+        $parameterSetsConfigs = $this->configResolver->resolveFromParameterSetsFromConfigFiles($configs, Set::SET_DIRECTORY);
         if ($parameterSetsConfigs !== []) {
             $configs = array_merge($configs, $parameterSetsConfigs);
         }
 
         return $configs;
+    }
+
+    public function getFirstResolvedConfig(): ?string
+    {
+        return $this->configResolver->getFirstResolvedConfig();
     }
 }
