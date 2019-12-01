@@ -209,12 +209,12 @@
             "@phpstan",
             "@docs"
         ],
-        "check-cs": "ecs check bin/rector packages src tests utils compiler --ansi",
+        "check-cs": "ecs check bin/rector packages src tests utils compiler/src compiler/tests --ansi",
         "fix-cs": [
-            "ecs check bin/rector packages src tests utils compiler --fix --ansi",
+            "ecs check bin/rector packages src tests utils compiler/src compiler/tests --fix --ansi",
             "ci/clean_trailing_spaces.sh"
         ],
-        "phpstan": "phpstan analyse packages src tests utils compiler --error-format symplify --ansi",
+        "phpstan": "phpstan analyse packages src tests utils --error-format symplify --ansi",
         "changelog": [
             "changelog-linker dump-merges --in-categories",
             "changelog-linker link",
