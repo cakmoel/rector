@@ -1,34 +1,36 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Rector\Compiler\Process;
 
+use Rector\Compiler\Contract\Process\ProcessFactoryInterface;
+use Rector\Compiler\Contract\Process\ProcessInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class DefaultProcessFactory implements ProcessFactory
+final class DefaultProcessFactory implements ProcessFactoryInterface
 {
+    /**
+     * @var OutputInterface
+     */
+    private $output;
 
-	/** @var OutputInterface */
-	private $output;
+    public function __construct()
+    {
+        $this->output = new NullOutput();
+    }
 
-	public function __construct()
-	{
-		$this->output = new NullOutput();
-	}
+    /**
+     * @param string[] $command
+     */
+    public function create(array $command, string $cwd): ProcessInterface
+    {
+        return new SymfonyProcess($command, $cwd, $this->output);
+    }
 
-	/**
-	 * @param string[] $command
-	 * @param string $cwd
-	 * @return \Rector\Compiler\Process\Process
-	 */
-	public function create(array $command, string $cwd): Process
-	{
-		return new SymfonyProcess($command, $cwd, $this->output);
-	}
-
-	public function setOutput(OutputInterface $output): void
-	{
-		$this->output = $output;
-	}
-
+    public function setOutput(OutputInterface $output): void
+    {
+        $this->output = $output;
+    }
 }

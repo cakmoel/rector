@@ -16,7 +16,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Compiler\\": "tests"
+            "Rector\\Compiler\\Tests\\": "tests"
         }
     },
     "require-dev": {

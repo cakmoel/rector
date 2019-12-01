@@ -1,7 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
+use Isolated\Symfony\Component\Finder\Finder;
 
 $stubs = [];
-$stubFinder = \Isolated\Symfony\Component\Finder\Finder::create();
+$stubFinder = Finder::create();
 foreach ($stubFinder->files()->name('*.php')->in(__DIR__ . '/../../stubs') as $file) {
     $stubs[] = $file->getPathName();
 }
@@ -21,62 +25,57 @@ return [
             if ($filePath !== 'vendor/nette/di/src/DI/Compiler.php') {
                 return $content;
             }
-            return str_replace('|Nette\\\\DI\\\\Statement', sprintf('|\\\\%s\\\\Nette\\\\DI\\\\Statement', $prefix), $content);
+            return str_replace(
+                '|Nette\\\\DI\\\\Statement',
+                sprintf('|\\\\%s\\\\Nette\\\\DI\\\\Statement', $prefix),
+                $content
+            );
         },
         function (string $filePath, string $prefix, string $content): string {
             if ($filePath !== 'vendor/nette/di/src/DI/Config/DefinitionSchema.php') {
                 return $content;
             }
-            $content = str_replace(
-                sprintf('\'%s\\\\callable', $prefix),
-                '\'callable',
-                $content
-            );
-            $content = str_replace(
+            $content = str_replace(sprintf('\'%s\\\\callable', $prefix), '\'callable', $content);
+            return str_replace(
                 '|Nette\\\\DI\\\\Definitions\\\\Statement',
                 sprintf('|%s\\\\Nette\\\\DI\\\\Definitions\\\\Statement', $prefix),
                 $content
             );
-
-            return $content;
         },
         function (string $filePath, string $prefix, string $content): string {
             if ($filePath !== 'vendor/nette/di/src/DI/Extensions/ExtensionsExtension.php') {
                 return $content;
             }
-            $content = str_replace(
-                sprintf('\'%s\\\\string', $prefix),
-                '\'string',
-                $content
-            );
-            $content = str_replace(
+            $content = str_replace(sprintf('\'%s\\\\string', $prefix), '\'string', $content);
+            return str_replace(
                 '|Nette\\\\DI\\\\Definitions\\\\Statement',
                 sprintf('|%s\\\\Nette\\\\DI\\\\Definitions\\\\Statement', $prefix),
                 $content
             );
-
-            return $content;
         },
         function (string $filePath, string $prefix, string $content): string {
             if ($filePath !== 'src/Testing/TestCase.php') {
                 return $content;
             }
-            return str_replace(sprintf('\\%s\\PHPUnit\\Framework\\TestCase', $prefix), '\\PHPUnit\\Framework\\TestCase', $content);
+            return str_replace(
+                sprintf('\\%s\\PHPUnit\\Framework\\TestCase', $prefix),
+                '\\PHPUnit\\Framework\\TestCase',
+                $content
+            );
         },
         function (string $filePath, string $prefix, string $content): string {
             if ($filePath !== 'src/Testing/LevelsTestCase.php') {
                 return $content;
             }
             return str_replace(
-                [sprintf('\\%s\\PHPUnit\\Framework\\AssertionFailedError', $prefix), sprintf('\\%s\\PHPUnit\\Framework\\TestCase', $prefix)],
+                [
+                    sprintf('\\%s\\PHPUnit\\Framework\\AssertionFailedError', $prefix),
+                    sprintf('\\%s\\PHPUnit\\Framework\\TestCase', $prefix),
+                ],
                 ['\\PHPUnit\\Framework\\AssertionFailedError', '\\PHPUnit\\Framework\\TestCase'],
                 $content
             );
         },
     ],
-    'whitelist' => [
-        'Rector\*',
-        'PHPStan\*',
-        'PhpParser\*',
-    ],
+    'whitelist' => ['Rector\*', 'PHPStan\*', 'PhpParser\*'],
 ];
