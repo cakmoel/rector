@@ -209,9 +209,9 @@
             "@phpstan",
             "@docs"
         ],
-        "check-cs": "ecs check bin packages src tests utils --ansi",
+        "check-cs": "ecs check bin/rector packages src tests utils --ansi",
         "fix-cs": [
-            "ecs check bin packages src tests utils --fix --ansi",
+            "ecs check bin/rector packages src tests utils --fix --ansi",
             "ci/clean_trailing_spaces.sh"
         ],
         "phpstan": "phpstan analyse packages src tests --error-format symplify --ansi",

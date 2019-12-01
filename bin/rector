@@ -4,11 +4,11 @@
 declare(strict_types=1);
 
 use Rector\Configuration\Configuration;
+use Rector\Console\Application;
 use Rector\Console\Style\SymfonyStyleFactory;
 use Rector\DependencyInjection\RectorContainerFactory;
 use Rector\Set\Set;
 use Symfony\Component\Console\Input\ArgvInput;
-use Rector\Console\Application;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\SetConfigResolver\ConfigResolver;
 
@@ -46,11 +46,6 @@ exit($application->run());
 final class AutoloadIncluder
 {
     /**
-     * @var string
-     */
-    private $currentWorkingDirectory;
-
-    /**
      * @var string[]
      */
     private const POSSIBLE_AUTOLOAD_PATHS = [
@@ -60,6 +55,11 @@ final class AutoloadIncluder
         __DIR__ . '/../../../../vendor/autoload.php',
     ];
 
+    /**
+     * @var string
+     */
+    private $currentWorkingDirectory;
+
     public function __construct(string $currentWorkingDirectory)
     {
         $this->currentWorkingDirectory = $currentWorkingDirectory;
@@ -68,7 +68,7 @@ final class AutoloadIncluder
     public function includeCwdVendorAutoloadIfExists(): void
     {
         $projectAutoload = $this->currentWorkingDirectory . '/vendor/autoload.php';
-        if (!is_file($projectAutoload)) {
+        if (! is_file($projectAutoload)) {
             return;
         }
 
@@ -156,13 +156,19 @@ final class RectorConfigsResolver
         }
 
         // And from --config or default one
-        $inputOrFallbackConfig = $this->configResolver->resolveFromInputWithFallback($input, ['rector.yml', 'rector.yaml']);
+        $inputOrFallbackConfig = $this->configResolver->resolveFromInputWithFallback(
+            $input,
+            ['rector.yml', 'rector.yaml']
+        );
         if ($inputOrFallbackConfig !== null) {
             $configs[] = $inputOrFallbackConfig;
         }
 
         // resolve: parameters > sets
-        $parameterSetsConfigs = $this->configResolver->resolveFromParameterSetsFromConfigFiles($configs, Set::SET_DIRECTORY);
+        $parameterSetsConfigs = $this->configResolver->resolveFromParameterSetsFromConfigFiles(
+            $configs,
+            Set::SET_DIRECTORY
+        );
         if ($parameterSetsConfigs !== []) {
             $configs = array_merge($configs, $parameterSetsConfigs);
         }
