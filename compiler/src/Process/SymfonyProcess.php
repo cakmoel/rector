@@ -11,7 +11,7 @@ use Symfony\Component\Process\Process;
 final class SymfonyProcess implements ProcessInterface
 {
     /**
-     * @var Process<string, string>
+     * @var Process
      */
     private $process;
 
@@ -26,9 +26,6 @@ final class SymfonyProcess implements ProcessInterface
             });
     }
 
-    /**
-     * @return Process<string, string>
-     */
     public function getProcess(): Process
     {
         return $this->process;

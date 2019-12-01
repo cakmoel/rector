@@ -8,8 +8,5 @@ use Symfony\Component\Process\Process;
 
 interface ProcessInterface
 {
-    /**
-     * @return Process<string, string>
-     */
     public function getProcess(): Process;
 }

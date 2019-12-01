@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Rector\Compiler\Console;
 
+use Nette\Utils\FileSystem as NetteFileSystem;
 use Nette\Utils\Json;
-use Rector\Compiler\Contract\Filesystem\FilesystemInterface;
 use Rector\Compiler\Contract\Process\ProcessFactoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 final class CompileCommand extends Command
 {
     /**
-     * @var FilesystemInterface
+     * @var Filesystem
      */
     private $filesystem;
 
@@ -33,14 +34,10 @@ final class CompileCommand extends Command
      */
     private $buildDir;
 
-    public function __construct(
-        FilesystemInterface $filesystem,
-        ProcessFactoryInterface $processFactory,
-        string $dataDir,
-        string $buildDir
-    ) {
+    public function __construct(ProcessFactoryInterface $processFactory, string $dataDir, string $buildDir)
+    {
         parent::__construct();
-        $this->filesystem = $filesystem;
+        $this->filesystem = new Filesystem();
         $this->processFactory = $processFactory;
         $this->dataDir = $dataDir;
         $this->buildDir = $buildDir;
@@ -48,8 +45,8 @@ final class CompileCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('rector:compile')
-            ->setDescription('Compile PHAR');
+        $this->setName('rector:compile');
+        $this->setDescription('Compile prefixed rector.phar');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -70,7 +67,7 @@ final class CompileCommand extends Command
 
     private function fixComposerJson(string $buildDir): void
     {
-        $fileContent = $this->filesystem->read($buildDir . '/composer.json');
+        $fileContent = NetteFileSystem::read($buildDir . '/composer.json');
         $json = Json::decode($fileContent, Json::FORCE_ARRAY);
 
         // remove dev dependencies (they create conflicts)
@@ -85,6 +82,6 @@ final class CompileCommand extends Command
 
         $encodedJson = Json::encode($json, Json::PRETTY);
 
-        $this->filesystem->write($buildDir . '/composer.json', $encodedJson);
+        $this->filesystem->dumpFile($buildDir . '/composer.json', $encodedJson);
     }
 }
