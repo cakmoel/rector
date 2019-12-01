@@ -18,8 +18,6 @@ use Symplify\SetConfigResolver\ConfigResolver;
 gc_disable();
 
 // Require Composer autoload.php
-/////////////////////////////////////////////////////
-
 $autoloadIncluder = new AutoloadIncluder(getcwd());
 $autoloadIncluder->includeCwdVendorAutoloadIfExists();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
@@ -80,7 +78,7 @@ final class AutoloadIncluder
     public function includeDependencyOrRepositoryVendorAutoloadIfExists(): void
     {
         // rector vendor is already loaded → skip
-        if (class_exists('Rector\HttpKernel\RectorKernel')) {
+        if ($this->isRectorVendorLoaded()) {
             return;
         }
 
@@ -121,6 +119,11 @@ final class AutoloadIncluder
         }
 
         require $vendorPath . '/autoload.php';
+    }
+
+    private function isRectorVendorLoaded(): bool
+    {
+        return class_exists('Rector\HttpKernel\RectorKernel');
     }
 }
 

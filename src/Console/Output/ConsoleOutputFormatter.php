@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Rector\Console\Output;
 
 use Nette\Utils\Strings;
-use Rector\ValueObject\Application\Error;
 use Rector\Application\ErrorAndDiffCollector;
 use Rector\Contract\Console\Output\OutputFormatterInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
+use Rector\ValueObject\Application\Error;
 use Rector\ValueObject\Reporting\FileDiff;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\SmartFileSystem\SmartFileInfo;

@@ -16,8 +16,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\Attributes\Ast\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
-use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NetteToSymfony\Route\RouteInfoFactory;
+use Rector\NetteToSymfony\ValueObject\RouteInfo;
 use Rector\NodeContainer\ParsedNodesByType;
 use Rector\PHPStan\Type\FullyQualifiedObjectType;
 use Rector\Rector\AbstractRector;
@@ -154,7 +154,7 @@ PHP
 
         $routeInfos = $this->createRouteInfosFromAssignNodes($assignNodes);
 
-        /** @var \Rector\NetteToSymfony\ValueObject\RouteInfo $routeInfo */
+        /** @var RouteInfo $routeInfo */
         foreach ($routeInfos as $routeInfo) {
             $classMethod = $this->resolveControllerClassMethod($routeInfo);
             if ($classMethod === null) {
@@ -206,7 +206,7 @@ PHP
 
     /**
      * @param Assign[] $assignNodes
-     * @return \Rector\NetteToSymfony\ValueObject\RouteInfo[]
+     * @return RouteInfo[]
      */
     private function createRouteInfosFromAssignNodes(array $assignNodes): array
     {
